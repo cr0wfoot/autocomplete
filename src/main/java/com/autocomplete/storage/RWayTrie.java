@@ -42,7 +42,7 @@ public class RWayTrie<T> implements Trie<T> {
     }
 
     private boolean isWordValid(String word) {
-        return word != null && word.isEmpty() && word.length() >= MIN_WORD_LENGTH;
+        return word != null && !word.isEmpty() && word.length() >= MIN_WORD_LENGTH;
     }
 
     private int position(int charAt) {
