@@ -1,4 +1,4 @@
-package com.autocomplete.store;
+package com.autocomplete.storage;
 
 public interface Trie<T> {
 

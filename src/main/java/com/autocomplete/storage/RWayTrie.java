@@ -1,4 +1,4 @@
-package com.autocomplete.store;
+package com.autocomplete.storage;
 
 import java.util.ArrayDeque;
 import java.util.Iterator;
