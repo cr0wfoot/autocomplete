@@ -24,8 +24,8 @@ public class WordsLoader {
 
     private void collectWords(String path, StringBuilder words) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(new File(path)));
-        String tmp;
-        while ((tmp = in.readLine()) != null)
-            words.append(tmp);
+        String nextLine;
+        while ((nextLine = in.readLine()) != null)
+            words.append(nextLine);
     }
 }
