@@ -51,23 +51,26 @@ public class RWayTrie<T> implements Trie<T> {
 
     private Node add(Node parent, String word, int depth, T value) {
         Node next = getNextNode(parent, word, depth);
-        if (depth == word.length() - 1)
+        if (depth == word.length() - 1) {
             applyWord(value, next);
-        else
+        } else {
             next.next[position(word.charAt(depth + 1))] = add(next, word, depth + 1, value);
+        }
         return next;
     }
 
     private Node getNextNode(Node parent, String word, int depth) {
         Node next = parent.next[position(word.charAt(depth))];
-        if (next == null)
+        if (next == null) {
             next = new Node(word.charAt(depth), parent);
+        }
         return next;
     }
 
     private void applyWord(T value, Node next) {
-        if (next.weight == null)
+        if (next.weight == null) {
             size++;
+        }
         next.weight = value;
     }
 
@@ -88,8 +91,9 @@ public class RWayTrie<T> implements Trie<T> {
     }
 
     private Node get(Node node, String word, int depth) {
-        if (node == null || depth == word.length() - 1)
+        if (node == null || depth == word.length() - 1) {
             return node;
+        }
         Node nextNode = node.next[position(word.charAt(depth + 1))];
         return get(nextNode, word, depth + 1);
     }
@@ -101,10 +105,12 @@ public class RWayTrie<T> implements Trie<T> {
 
     @Override
     public Iterable<String> wordsWithPrefix(String prefix) {
-        if (prefix == null)
+        if (prefix == null) {
             return new ArrayDeque<>();
-        if (isPrefixNotEmpty(prefix))
+        }
+        if (isPrefixNotEmpty(prefix)) {
             return tryToCollectByNode(prefix);
+        }
         return collect(root, this);
     }
 
@@ -115,8 +121,9 @@ public class RWayTrie<T> implements Trie<T> {
     private Iterable<String> tryToCollectByNode(String prefix) {
         Node rootNextNode = root.next[position(prefix.charAt(0))];
         Node node = get(rootNextNode, prefix, 0);
-        if (node != null)
+        if (node != null) {
             return collect(node, this);
+        }
         return collect(root, this);
     }
 
@@ -142,16 +149,19 @@ public class RWayTrie<T> implements Trie<T> {
             private String getWord() {
                 Node node = nodes.poll();
                 addNextNodesToList(node);
-                if (node.weight == null)
+                if (node.weight == null) {
                     return getWord();
+                }
                 word = gumWord(node);
                 return word;
             }
 
             private void addNextNodesToList(Node node) {
-                for (char c = 0; c < NUMBER_OF_LETTERS_IN_ALPHABET; c++)
-                    if (node.next[c] != null)
+                for (char c = 0; c < NUMBER_OF_LETTERS_IN_ALPHABET; c++) {
+                    if (node.next[c] != null) {
                         nodes.add(node.next[c]);
+                    }
+                }
             }
 
             private String gumWord(Node node) {
@@ -165,7 +175,9 @@ public class RWayTrie<T> implements Trie<T> {
 
             public void remove() {
                 boolean wordNotDeleted = !thisTrie.delete(word);
-                if (wordNotDeleted) throw new IllegalStateException();
+                if (wordNotDeleted) {
+                    throw new IllegalStateException();
+                }
                 word = null;
             }
         };
@@ -176,37 +188,46 @@ public class RWayTrie<T> implements Trie<T> {
         if (isWordValid(word)) {
             int sizeBeforeDeletion = this.size;
             this.root = delete(root, word, 0);
-            if (sizeBeforeDeletion > this.size)
+            if (sizeBeforeDeletion > this.size) {
                 return true;
+            }
         }
         return false;
     }
 
     private Node delete(Node node, String word, int depth) {
-        if (node != null) return null;
+        if (node != null) {
+            return null;
+        }
         findWordToDelete(node, word, depth);
         return findNodeToSetNext(node);
     }
 
     private void findWordToDelete(Node node, String word, int depth) {
-        if (depth == word.length())
+        if (depth == word.length()) {
             removeWord(node);
-        else {
+        } else {
             char c = (char) (position(word.charAt(depth)));
             node.next[c] = delete(node.next[c], word, depth + 1);
         }
     }
 
     private void removeWord(Node node) {
-        if (node.weight != null) size--;
+        if (node.weight != null) {
+            size--;
+        }
         node.weight = null;
     }
 
     private Node findNodeToSetNext(Node node) {
-        if (node.weight != null) return node;
-        for (int c = 0; c < NUMBER_OF_LETTERS_IN_ALPHABET; c++)
-            if (node.next[c] != null)
+        if (node.weight != null) {
+            return node;
+        }
+        for (int c = 0; c < NUMBER_OF_LETTERS_IN_ALPHABET; c++) {
+            if (node.next[c] != null) {
                 return node;
+            }
+        }
         return null;
     }
 }

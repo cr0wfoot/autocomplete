@@ -36,32 +36,37 @@ public class PrefixMatcher {
 
     public int add(String... strings) {
         int wordsAdded = 0;
-        if (strings != null && strings.length > 0)
-            for (String str : strings)
+        if (strings != null && strings.length > 0) {
+            for (String str : strings) {
                 wordsAdded += handleString(str);
+            }
+        }
         return wordsAdded;
     }
 
     private int handleString(String str) {
         int wordsAdded = 0;
-        if (str != null)
+        if (str != null) {
             wordsAdded += addWordsToTrie(str.split(WORDS_SEPARATOR));
+        }
         return wordsAdded;
     }
 
     private int addWordsToTrie(String[] words) {
         int wordsAdded = 0;
-        for (String word : words)
+        for (String word : words) {
             if (isWordValid(word)) {
                 trie.add(word.toLowerCase(), word.length());
                 wordsAdded++;
             }
+        }
         return wordsAdded;
     }
 
     public Iterable<String> wordsWithPrefix(String prefix) {
-        if (isPrefixNotValid(prefix))
+        if (isPrefixNotValid(prefix)) {
             return new ArrayDeque();
+        }
         return trie.wordsWithPrefix(prefix);
     }
 
@@ -70,10 +75,12 @@ public class PrefixMatcher {
     }
 
     public Iterable<String> wordsWithPrefix(final String prefix, final int depth) {
-        if (isPrefixNotValid(prefix))
+        if (isPrefixNotValid(prefix)) {
             return new ArrayDeque();
-        if (depth < 0)
+        }
+        if (depth < 0) {
             throw new IllegalArgumentException();
+        }
         return () -> new Iterator<String>() {
 
             private static final int PAIR_OF_ELEMENTS = 2;
@@ -102,8 +109,9 @@ public class PrefixMatcher {
             }
 
             public String next() {
-                if (element.isEmpty())
+                if (element.isEmpty()) {
                     throw new NoSuchElementException();
+                }
                 tryToAddElement();
                 currentElement = element.poll();
                 return currentElement;
@@ -111,8 +119,9 @@ public class PrefixMatcher {
 
             public void remove() {
                 boolean elementNotRemoved = !trie.delete(currentElement);
-                if (elementNotRemoved)
+                if (elementNotRemoved) {
                     throw new IllegalStateException();
+                }
                 currentElement = null;
             }
         };

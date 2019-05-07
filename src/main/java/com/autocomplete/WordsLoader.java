@@ -4,8 +4,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class WordsLoader {
@@ -17,7 +15,7 @@ public class WordsLoader {
         try {
             collectWords(path, words);
         } catch (IOException ex) {
-            Logger.getLogger(WordsLoader.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
         }
         return Pattern.compile(WORD_REGEX).split(words);
     }
@@ -25,7 +23,8 @@ public class WordsLoader {
     private void collectWords(String path, StringBuilder words) throws IOException {
         BufferedReader in = new BufferedReader(new FileReader(new File(path)));
         String nextLine;
-        while ((nextLine = in.readLine()) != null)
+        while ((nextLine = in.readLine()) != null) {
             words.append(nextLine);
+        }
     }
 }
